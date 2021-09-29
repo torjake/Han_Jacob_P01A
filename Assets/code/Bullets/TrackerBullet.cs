@@ -8,10 +8,13 @@ public class TrackerBullet : BulletsBaseClass
     float _trackerSpeed = 1200f;
 
     float deathTimer;
+    //
+    //public PlayerObserver _playerObs;
 
     protected override void HitPlayer(GameObject player)
     {
         player.GetComponent<TankController>().DecreaseHealth(1);
+        //_playerObs._playerDamaged?.Invoke(1);
         Destroy(gameObject);
     }
     protected override void HitBoss(BossBaseClass boss)

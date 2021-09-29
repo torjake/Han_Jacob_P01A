@@ -28,10 +28,16 @@ public class BossBaseClass : MonoBehaviour
     //
     public GameObject lilBullet;
     public GameObject Beam;
+
+    public PlayerHealthBarScript healthBar;
+    //
+    [SerializeField] private Material _bossMaterial;
+    private Color _bossPink;
     void Awake() 
     {
         _currentHealth = _maxHealth;
-        print("herdgfe");
+        //print("herdgfe");
+        _bossPink = _bossMaterial.color;
     }
     void Update() 
     {
@@ -49,9 +55,11 @@ public class BossBaseClass : MonoBehaviour
         if (pickNewMove) 
         {
             Decider();
+            StartCoroutine(BossChangeColor(Color.black, 0.3f));
         }
         if (!pickNewMove) 
         {
+            _bossMaterial.color = _bossPink;
 
             if (losMove == true)
                 CanSeeMove();
@@ -109,7 +117,7 @@ public class BossBaseClass : MonoBehaviour
     }
     void ShootLittleShits() 
     {
-        print("here");
+        //print("here");
         if (Random.Range(0, 2) == 1)
         {
             Vector3 targetDirection = leftWallShootPoint.transform.position - this.transform.position;
@@ -150,6 +158,8 @@ public class BossBaseClass : MonoBehaviour
     public void DecreaseHealth(int amount)
     {
         _currentHealth -= amount;
+        healthBar.SetHealth(_currentHealth);
+        StartCoroutine(BossChangeColor(Color.red, 0.5f));
         Debug.Log("Player's health: " + _currentHealth);
         if (_currentHealth <= 0)
         {
@@ -161,5 +171,25 @@ public class BossBaseClass : MonoBehaviour
         gameObject.SetActive(false);
         //play particles
         //play sounds
+    }
+    IEnumerator BossChangeColor(Color _bossColor, float _duration) 
+    {
+        float _elapsed = 0f;
+
+        while (_elapsed < _duration)
+        {
+
+
+            //Apply New Color
+            _bossMaterial.color = _bossColor;
+            
+
+            _elapsed += Time.deltaTime;
+
+            yield return null;
+        }
+
+        //reset color
+        _bossMaterial.color = _bossPink;
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class TankController : MonoBehaviour
 {
+
     [SerializeField] public float _moveSpeed = .25f;
     [SerializeField] float _turnSpeed = 2f;
 
@@ -18,10 +19,16 @@ public class TankController : MonoBehaviour
     public bool canTakeDamage = true;
     //
     public Text playerHealth;
+    //
+    public PlayerHealthBarScript healthBar;
+    //
+    public CamShake _camShake;
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _currentHealth = _maxHealth;
+        //
+       
     }
 
     private void FixedUpdate()
@@ -67,12 +74,16 @@ public class TankController : MonoBehaviour
     public void DecreaseHealth(int amount)
     {
         _currentHealth -= amount;
-        Debug.Log("Player's health: " + _currentHealth);
+        healthBar.SetHealth(_currentHealth);
+        //StartCoroutine(CamShake(.15f, .4f));
+        StartCoroutine(_camShake.Shake(.15f, .4f));
+        //Debug.Log("Player's health: " + _currentHealth);
         if (_currentHealth <= 0)
         {
             Kill();
         }
     }
+
     public void Kill()
     {
         gameObject.SetActive(false);

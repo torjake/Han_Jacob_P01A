@@ -76,7 +76,7 @@ public abstract class BulletsBaseClass : MonoBehaviour
     }
     private void Feedback()
     {
-        print("effect");
+        //print("effect");
         // particles
         if (_collectParticles != null)
         {
